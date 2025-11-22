@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="cevlog2.png" type="image/png">
+    <title>Página de Cadastro</title>
+    <link rel="stylesheet" href="estilo3.css">
+</head>
+<body>
+
+    <header>
+        <nav>  
+           <img src="cevlogo.png" alt="CulturaEmVista" 
+             style="width: 50px; height: 50px;">
+  
+           <text>Cultura em Vista</text> 
+  
+  
+            <p align="left"><a href="../index.html">Voltar</a></p>   
+        </nav>
+     </header>
+
+    <br>
+<form id="cadastroForm">
+   <table>
+      <tr>
+        <td>
+    <h1>Página de Cadastro</h1>
+       
+        <label>Nome:</label><br>
+        <input type="text" id="nome" name="nome" required>
+        <br><br>
+
+        <label>Sobrenome:</label><br>
+        <input type="text" id="sobrenome" name="sobrenome" required>
+        <br><br>
+
+        <label>Email:</label><br>
+        <input type="email" id="email" name="email" required>
+        <br><br>
+
+        <label>Tipo de Perfil:</label><br><br>
+        <label>
+            <input type="radio" name="tipo" value="investidor" required>
+               Investidor    
+          </label>
+        <br><br>
+          <label>
+            <input type="radio" name="tipo" value="projeto" required>
+               Projeto Cultural
+        </label>
+        <br><br>
+
+        <label>Login:</label><br>
+        <input type="text" id="login" name="login" required minlength="3">
+        <br><br>
+
+        <label>Senha:</label><br>
+        <input type="password" id="senha" name="senha" required minlength="6">
+        <br><br>
+      
+        <label>Confirmar Senha:</label><br>
+        <input type="password" id="confirmarSenha" name="confirmarSenha" required>
+        <br><br>
+
+        <p id="errorMessage" class="error-message"></p>
+        <p id="successMessage" class="success-message"></p>
+
+        <nav>
+        <button type="submit" class="cadastrar">Cadastrar</button>
+        </nav>
+    
+    </td>
+    </tr>
+  </table>
+
+    
+    </form>
+
+    <script src="../js/data-manager.js"></script>
+    <script>
+      document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const errorElement = document.getElementById('errorMessage');
+        const successElement = document.getElementById('successMessage');
+        errorElement.textContent = '';
+        successElement.textContent = '';
+        
+        const nome = document.getElementById('nome').value.trim();
+        const sobrenome = document.getElementById('sobrenome').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const login = document.getElementById('login').value.trim();
+        const senha = document.getElementById('senha').value;
+        const confirmarSenha = document.getElementById('confirmarSenha').value;
+        const tipo = document.getElementById('tipo').value;
+        
+        // Validações
+        if (!nome || !sobrenome || !email || !login || !senha) {
+          errorElement.textContent = 'Por favor, preencha todos os campos.';
+          return;
+        }
+        
+        if (login.length < 3) {
+          errorElement.textContent = 'Login deve ter pelo menos 3 caracteres.';
+          return;
+        }
+        
+        if (senha.length < 6) {
+          errorElement.textContent = 'Senha deve ter pelo menos 6 caracteres.';
+          return;
+        }
+        
+        if (senha !== confirmarSenha) {
+          errorElement.textContent = 'As senhas não coincidem.';
+          return;
+        }
+        
+        // Verificar se login já existe
+        const users = dataManager.getUsers();
+        if (users.find(u => u.login === login)) {
+          errorElement.textContent = 'Este login já está em uso. Escolha outro.';
+          return;
+        }
+        
+        // Verificar se email já existe
+        if (users.find(u => u.email === email)) {
+          errorElement.textContent = 'Este email já está cadastrado.';
+          return;
+        }
+        
+        // Criar novo usuário
+        const newUser = {
+          nome,
+          sobrenome,
+          email,
+          login,
+          senha,
+          tipo
+        };
+        
+        dataManager.addUser(newUser);
+        
+        successElement.textContent = 'Cadastro realizado com sucesso! Redirecionando...';
+        
+        // Redirecionar após 2 segundos
+        setTimeout(() => {
+          if (tipo === 'projeto') {
+            window.location.href = '../site/cadastro2/cadastro2.html'; // Redireciona para o cadastro do projeto
+          } else {
+            window.location.href = '../index.html'; // Redireciona para a página de login
+          }
+        }, 2000);
+      });
+    </script>
+</body>
+</html>
