@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="cevlog2.png" type="image/png">  
+  <title>Cultura em Vista</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+    
+  <header>
+         <div class="left">
+         <img src="cevlogo.png" alt="CulturaEmVista" class="logo">
+         <h2>Cultura em Vista</h2>
+         </div> 
+    
+       <nav class="login">
+         <label>Login </label><input type="text" id="loginInput" placeholder="Usuário">
+         <label>Senha </label><input type="password" id="senhaInput" placeholder="Senha">
+         <button id="btnEntrar">Entrar</button>
+         <span id="loginError" class="error-message"></span>
+       </nav>
+  </header>
+
+ <section class="hero">
+    <div class="overlay">
+      <h1>PLATAFORMA DIGITAL INOVADORA QUE PERMITE O INVESTIMENTO EFICIENTE DE RECURSOS FINANCEIROS PARA PROJETOS CULTURAIS</h1>
+      <br><br>
+      <p>
+        O site serve como um ambiente facilitador para a apresentação detalhada dos projetos, possibilitando aos investidores<br>
+      a análise criteriosa das propostas e o financiamento de iniciativas culturais de diversos portes e segmentos.
+      </p>
+      <div class="buttons">
+        <a href="cadastro/cadastro.html" class="btn">CADASTRE-SE</a>
+      </div>
+  </section>
+
+<footer>
+      <p>Todos os Direitos Reservados. &copy; 2025</p>
+</footer>
+
+  <script src="js/data-manager.js"></script>
+  <script>
+    document.getElementById('btnEntrar').addEventListener('click', function() {
+      const login = document.getElementById('loginInput').value.trim();
+      const senha = document.getElementById('senhaInput').value.trim();
+      const errorElement = document.getElementById('loginError');
+      
+      if (!login || !senha) {
+        errorElement.textContent = 'Por favor, preencha login e senha';
+        errorElement.style.display = 'inline';
+        return;
+      }
+      
+      const user = dataManager.getUserByLogin(login, senha);
+      
+      if (user) {
+        dataManager.setCurrentUser(user);
+        // Redirecionar baseado no tipo de usuário
+        if (user.tipo === 'projeto') {
+          window.location.href = 'site/dashboard-projeto.html';
+        } else {
+          window.location.href = 'site/site.html';
+        }
+      } else {
+        errorElement.textContent = 'Login ou senha incorretos';
+        errorElement.style.display = 'inline';
+      }
+    });
+
+    // Permitir login com Enter
+    document.getElementById('senhaInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('btnEntrar').click();
+      }
+    });
+
+    // Limpar erro ao digitar
+    document.getElementById('loginInput').addEventListener('input', function() {
+      document.getElementById('loginError').style.display = 'none';
+    });
+    document.getElementById('senhaInput').addEventListener('input', function() {
+      document.getElementById('loginError').style.display = 'none';
+    });
+  </script>
+
+</body>
+</html>
+
+
+
+
+
+  
+  
